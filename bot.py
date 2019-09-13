@@ -1,3 +1,5 @@
+import json
+
 import requests
 import misc
 import parseManas
@@ -26,7 +28,10 @@ def get_message():
     if last_update_id != current_update_id:
         last_update_id = current_update_id
         chat_id = last_object['message']['chat']['id']
-        message_text = last_object['message']['text']
+        try:
+            message_text = last_object['message']['text']
+        except:
+            message_text = ''
         message = {
             'chat_id': chat_id,
             'message_text': message_text
@@ -42,10 +47,9 @@ def send_message(chat_id, text="Wait a second..."):
 
 
 def main():
-    # words = get_updates()
+    words = get_updates()
     # with open('updates.json', 'w') as file:
     #     json.dump(words, file, indent=2, ensure_ascii=False)
-
     # get_message()
     while True:
         answer = get_message()
@@ -54,16 +58,19 @@ def main():
             asnwer = ['yemek', 'manasyemek', 'manas menu', 'еда', 'menu']
 
             if str(answer['message_text']).lower() in asnwer:
-                all_result = parseManas.index()
-                result = all_result['yemek1'] + ' - ' + all_result['kalori1'] + ' калорий\n' + all_result[
-                    'yemek2'] + ' - ' + \
-                         all_result[
-                             'kalori2'] + ' калорий\n' + \
-                         all_result['yemek3'] + ' - ' + all_result['kalori3'] + ' калорий\n' + all_result[
-                             'yemek4'] + ' - ' + \
-                         all_result[
-                             'kalori4'] + ' калорий'
-                send_message(chat_id, result)
+                try:
+                    all_result = parseManas.index()
+                    result = all_result['yemek1'] + ' - ' + all_result['kalori1'] + ' калорий\n' + all_result[
+                        'yemek2'] + ' - ' + \
+                             all_result[
+                                 'kalori2'] + ' калорий\n' + \
+                             all_result['yemek3'] + ' - ' + all_result['kalori3'] + ' калорий\n' + all_result[
+                                 'yemek4'] + ' - ' + \
+                             all_result[
+                                 'kalori4'] + ' калорий'
+                    send_message(chat_id, result)
+                except:
+                    send_message(chat_id, 'Сегодня выходной')
             elif str(answer['message_text']).lower() == 'help':
                 l = ''
                 with open('help.txt', 'r') as text:
