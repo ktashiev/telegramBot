@@ -1,6 +1,7 @@
 import requests
 import misc
 import parseManas
+import weather
 
 # https://api.telegram.org/bot720219419:AAGv4u2sDFt_VUuzZXDPh-rH2j4hJNAlLBE/sendmessage?chat_id=694174252&text=hi
 token = misc.token
@@ -69,6 +70,14 @@ def main():
                     for line in text:
                         l += line + '\n'
                 send_message(chat_id, l)
+            elif str(answer['message_text']).lower() == 'weather':
+                w = 'Данное время' + weather.weather_result['time'] + '\n' + 'Текушая температура: ' + \
+                    weather.weather_result['temp_now'] + '\n' + 'Минимальная температура: ' + \
+                    weather.weather_result['temp_min'] + '\n' + 'Максимальная температура: ' + weather.weather_result[
+                        'temp_max'] + '\n' + \
+                    'Влажность: ' + weather.weather_result['humidity'] + '%\n' + \
+                    'Ветер: ' + weather.weather_result['speed'] + 'км/ч'
+                send_message(chat_id, w)
         else:
             continue
 
