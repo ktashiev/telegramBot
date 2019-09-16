@@ -36,8 +36,7 @@ def get_info_course_three(html):
     return help + second
 
 
-def lesson_three():
-    url = 'http://timetable.manas.edu.kg/department-printer/95'
+def lesson_three(url):
     result = get_info_course_three(get_html(url))
     return result
 

@@ -54,6 +54,10 @@ def main():
     # with open('updates.json', 'w') as file:
     #     json.dump(words, file, indent=2, ensure_ascii=False)
     # get_message()
+    lesson_3 = 'http://timetable.manas.edu.kg/department-printer/95'
+    lesson_1 = 'http://timetable.manas.edu.kg/department-printer/1'
+    lesson_2 = 'http://timetable.manas.edu.kg/department-printer/48'
+    lesson_4 = 'http://timetable.manas.edu.kg/department-printer/142'
     while True:
         answer = get_message()
         if answer != None:
@@ -92,8 +96,14 @@ def main():
             elif 'привет' in str(answer['message_text']).lower():
                 send_message(chat_id, 'Здравствуйте,' + name + '!\n' + 'Напишите "help"')
 
+            elif 'lesson_1' in str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_1))
+            elif 'lesson_2' in str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_2))
             elif 'lesson_3' in str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three())
+                send_message(chat_id, lesson3.lesson_three(lesson_3))
+            elif 'lesson_4' in str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_4))
 
         else:
             continue
