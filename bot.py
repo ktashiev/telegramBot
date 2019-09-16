@@ -4,6 +4,7 @@ import requests
 import misc
 import parseManas
 import weather
+import lesson3
 
 # https://api.telegram.org/bot720219419:AAGv4u2sDFt_VUuzZXDPh-rH2j4hJNAlLBE/sendmessage?chat_id=694174252&text=hi
 token = misc.token
@@ -28,13 +29,15 @@ def get_message():
     if last_update_id != current_update_id:
         last_update_id = current_update_id
         chat_id = last_object['message']['chat']['id']
+        name = last_object['message']['from']['first_name'] + ' ' + last_object['message']['from']['last_name']
         try:
             message_text = last_object['message']['text']
         except:
             message_text = ''
         message = {
             'chat_id': chat_id,
-            'message_text': message_text
+            'message_text': message_text,
+            'name': name
         }
         return message
 
@@ -55,6 +58,7 @@ def main():
         answer = get_message()
         if answer != None:
             chat_id = answer['chat_id']
+            name = answer['name']
             asnwer = ['yemek', 'manasyemek', 'manas menu', 'еда', 'menu']
 
             if str(answer['message_text']).lower() in asnwer:
@@ -85,6 +89,12 @@ def main():
                     'Влажность: ' + weather.weather_result['humidity'] + '\n' + \
                     'Ветер: ' + weather.weather_result['speed']
                 send_message(chat_id, w)
+            elif 'привет' in str(answer['message_text']).lower():
+                send_message(chat_id, 'Здравствуйте,' + name + '!\n' + 'Напишите "help"')
+
+            elif 'lesson_3' in str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three())
+
         else:
             continue
 
