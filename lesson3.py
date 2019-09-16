@@ -12,10 +12,9 @@ def get_info_course_three(html):
     week = datetime.today().weekday()
     soup = BeautifulSoup(html, 'lxml')
     time = datetime.now().time()
-    # time_now = str(time.hour) + ":" + str(time.minute)
-    time_now = '15:30'
+    time_now = str(time.hour) + ":" + str(time.minute)
+    # time_now = '15:30'
     help = ''
-    second = ''
     times_html = soup.find('div', class_='.container-fluid').find('table',
                                                                   class_='table table-bordered').find_all('tr')
     for i in times_html:
