@@ -12,8 +12,8 @@ def get_info_course_three(html):
     week = datetime.today().weekday()
     soup = BeautifulSoup(html, 'lxml')
     time = datetime.now().time()
-    time_now = str(time.hour) + ":" + str(time.minute)
-    # time_now = '11:30'
+    # time_now = str(time.hour) + ":" + str(time.minute)
+    time_now = '15:30'
     help = ''
     second = ''
     times_html = soup.find('div', class_='.container-fluid').find('table',
@@ -22,18 +22,14 @@ def get_info_course_three(html):
         try:
             if datetime.strptime(time_now, '%H:%M').time() <= datetime.strptime(str(i.next.next).split('-')[0],
                                                                                 '%H:%M').time():
-                help = i.find_all()[week].next + '\n'
-                second = i.find_all()[week + 1].next + '\n' + i.find_all()[
-                    week + 2].next + '\n' + i.find_all()[
-                             week + 3].next + '\n' + i.find_all()[week + 4].next
-                break
+                for num in range(5):
+                    if i.find_all()[week + num + 1].next != ' Ayrılmış (Reserved)':
+                        if i.find_all()[week + num].next != " ":
+                            help += i.find_all()[week + num].next + '\n'
+                help += '\n'
         except:
             continue
-    if second:
-        second = 'Reserved'
-    if help:
-        help = ''
-    return help + second
+    return help
 
 
 def lesson_three(url):
@@ -42,4 +38,4 @@ def lesson_three(url):
 
 
 if __name__ == '__main__':
-    lesson_three()
+    lesson_three('http://timetable.manas.edu.kg/department-printer/1')

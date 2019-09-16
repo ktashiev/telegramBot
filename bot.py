@@ -93,18 +93,18 @@ def main():
                     'Влажность: ' + weather.weather_result['humidity'] + '\n' + \
                     'Ветер: ' + weather.weather_result['speed']
                 send_message(chat_id, w)
+
+
+            elif 'lesson_1' == str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_1))
+            elif 'lesson_2' == str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_2))
+            elif 'lesson_3' == str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_3))
+            elif 'lesson_4' == str(answer['message_text']).lower():
+                send_message(chat_id, lesson3.lesson_three(lesson_4))
             elif 'привет' in str(answer['message_text']).lower():
                 send_message(chat_id, 'Здравствуйте,' + name + '!\n' + 'Напишите "help"')
-
-            elif 'lesson_1' in str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_1))
-            elif 'lesson_2' in str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_2))
-            elif 'lesson_3' in str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_3))
-            elif 'lesson_4' in str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_4))
-
         else:
             continue
 
