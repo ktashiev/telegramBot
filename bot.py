@@ -23,13 +23,12 @@ def send_text(message):
     lesson_2 = 'http://timetable.manas.edu.kg/department-printer/48'
     lesson_3 = 'http://timetable.manas.edu.kg/department-printer/95'
     lesson_4 = 'http://timetable.manas.edu.kg/department-printer/142'
-
     if message.text.lower() == 'help':
         l = ''
         with open('help.txt', 'r') as text:
             for line in text:
                 l += line + '\n'
-        bot.send_message(message.chat.id, l + str(datetime.now()))
+        bot.send_message(message.chat.id, l)
     elif message.text.lower() == 'weather':
         w = 'Данное время: ' + weather.weather_result['time'] + '\n' + 'Текушая температура: ' + \
             weather.weather_result['temp_now'] + '\n' + 'Минимальная температура: ' + \

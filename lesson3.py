@@ -11,7 +11,7 @@ def get_html(url):
 def get_info_course_three(html):
     week = datetime.today().weekday()
     soup = BeautifulSoup(html, 'lxml')
-    time = (datetime.now() + timedelta(hours=0)).time()
+    time = (datetime.now() + timedelta(hours=6)).time()
     time_now = str(time.hour) + ":" + str(time.minute)
     # time_now = '10:35'
     help = ''
