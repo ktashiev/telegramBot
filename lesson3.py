@@ -13,7 +13,7 @@ def get_info_course_three(html):
     soup = BeautifulSoup(html, 'lxml')
     time = datetime.now().time()
     time_now = str(time.hour) + ":" + str(time.minute)
-    # time_now = '15:30'
+    # time_now = '10:35'
     help = ''
     times_html = soup.find('div', class_='.container-fluid').find('table',
                                                                   class_='table table-bordered').find_all('tr')
@@ -21,20 +21,27 @@ def get_info_course_three(html):
         try:
             if datetime.strptime(time_now, '%H:%M').time() <= datetime.strptime(str(i.next.next).split('-')[0],
                                                                                 '%H:%M').time():
-                for num in range(5):
-                    if i.find_all()[week + num + 1].next != ' Ayrılmış (Reserved)':
-                        if i.find_all()[week + num].next != " ":
-                            help += i.find_all()[week + num].next + '\n'
-                help += '\n'
+                if datetime.strptime('17:00', '%H:%M').time() >= datetime.strptime(
+                        str(i.find_all()[0].next).split('-')[0],
+                        '%H:%M').time():
+                    help += i.find_all()[0].next + '\n'
+                    for num in range(5):
+                        if i.find_all()[week + num].next != ' Ayrılmış (Reserved)':
+                            if i.find_all()[week + num].next != " ":
+                                help += i.find_all()[week + num].next + '\n'
+                    help += '\n'
         except:
             continue
     return help
 
 
 def lesson_three(url):
-    result = get_info_course_three(get_html(url))
+    if get_info_course_three(get_html(url)):
+        result = get_info_course_three(get_html(url))
+    else:
+        result = 'Reserved'
     return result
 
 
 if __name__ == '__main__':
-    lesson_three('http://timetable.manas.edu.kg/department-printer/1')
+    print(lesson_three('http://timetable.manas.edu.kg/department-printer/1'))

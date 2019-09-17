@@ -1,113 +1,72 @@
-import json
-
-import requests
-import misc
-import parseManas
+import telebot
 import weather
 import lesson3
+import parseManas
 
-# https://api.telegram.org/bot720219419:AAGv4u2sDFt_VUuzZXDPh-rH2j4hJNAlLBE/sendmessage?chat_id=694174252&text=hi
-token = misc.token
-URL = 'https://api.telegram.org/bot' + token + '/'
-
-global last_update_id
-last_update_id = 0
-
-
-def get_updates():
-    url = URL + 'getupdates'
-    r = requests.get(url)
-    return r.json()
+bot = telebot.TeleBot('720219419:AAGv4u2sDFt_VUuzZXDPh-rH2j4hJNAlLBE')
+keyboard1 = telebot.types.ReplyKeyboardMarkup()
+keyboard1.resize_keyboard = 5
+keyboard1.row('yemek', 'weather')
+keyboard1.row('course1', 'course2')
+keyboard1.row('course3', 'course4')
 
 
-def get_message():
-    data = get_updates()
-    global last_update_id
-
-    last_object = data['result'][-1]
-    current_update_id = last_object['update_id']
-    if last_update_id != current_update_id:
-        last_update_id = current_update_id
-        chat_id = last_object['message']['chat']['id']
-        name = last_object['message']['from']['first_name'] + ' ' + last_object['message']['from']['last_name']
-        try:
-            message_text = last_object['message']['text']
-        except:
-            message_text = ''
-        message = {
-            'chat_id': chat_id,
-            'message_text': message_text,
-            'name': name
-        }
-        return message
-
-    return None
+@bot.message_handler(commands=['start'])
+def start_message(message):
+    bot.send_message(message.chat.id, 'Здравствуйте, я готов ответить на ваши вопросы', reply_markup=keyboard1)
 
 
-def send_message(chat_id, text="Wait a second..."):
-    url = URL + 'sendmessage?chat_id={}&text={}'.format(chat_id, text)
-    requests.get(url)
-
-
-def main():
-    words = get_updates()
-    # with open('updates.json', 'w') as file:
-    #     json.dump(words, file, indent=2, ensure_ascii=False)
-    # get_message()
-    lesson_3 = 'http://timetable.manas.edu.kg/department-printer/95'
+@bot.message_handler(content_types=['text'])
+def send_text(message):
     lesson_1 = 'http://timetable.manas.edu.kg/department-printer/1'
     lesson_2 = 'http://timetable.manas.edu.kg/department-printer/48'
+    lesson_3 = 'http://timetable.manas.edu.kg/department-printer/95'
     lesson_4 = 'http://timetable.manas.edu.kg/department-printer/142'
-    while True:
-        answer = get_message()
-        if answer != None:
-            chat_id = answer['chat_id']
-            name = answer['name']
-            asnwer = ['yemek', 'manasyemek', 'manas menu', 'еда', 'menu']
 
-            if str(answer['message_text']).lower() in asnwer:
-                try:
-                    all_result = parseManas.index()
-                    result = all_result['yemek1'] + ' - ' + all_result['kalori1'] + ' калорий\n' + all_result[
-                        'yemek2'] + ' - ' + \
-                             all_result[
-                                 'kalori2'] + ' калорий\n' + \
-                             all_result['yemek3'] + ' - ' + all_result['kalori3'] + ' калорий\n' + all_result[
-                                 'yemek4'] + ' - ' + \
-                             all_result[
-                                 'kalori4'] + ' калорий'
-                    send_message(chat_id, result)
-                except:
-                    send_message(chat_id, 'Сегодня выходной')
-            elif str(answer['message_text']).lower() == 'help':
-                l = ''
-                with open('help.txt', 'r') as text:
-                    for line in text:
-                        l += line + '\n'
-                send_message(chat_id, l)
-            elif str(answer['message_text']).lower() == 'weather':
-                w = 'Данное время: ' + weather.weather_result['time'] + '\n' + 'Текушая температура: ' + \
-                    weather.weather_result['temp_now'] + '\n' + 'Минимальная температура: ' + \
-                    weather.weather_result['temp_min'] + '\n' + 'Максимальная температура: ' + weather.weather_result[
-                        'temp_max'] + '\n' + \
-                    'Влажность: ' + weather.weather_result['humidity'] + '\n' + \
-                    'Ветер: ' + weather.weather_result['speed']
-                send_message(chat_id, w)
+    if message.text.lower() == 'help':
+        l = ''
+        with open('help.txt', 'r') as text:
+            for line in text:
+                l += line + '\n'
+        bot.send_message(message.chat.id, l)
+    elif message.text.lower() == 'weather':
+        w = 'Данное время: ' + weather.weather_result['time'] + '\n' + 'Текушая температура: ' + \
+            weather.weather_result['temp_now'] + '\n' + 'Минимальная температура: ' + \
+            weather.weather_result['temp_min'] + '\n' + 'Максимальная температура: ' + weather.weather_result[
+                'temp_max'] + '\n' + \
+            'Влажность: ' + weather.weather_result['humidity'] + '\n' + \
+            'Ветер: ' + weather.weather_result['speed']
+        bot.send_message(message.chat.id, w)
 
-
-            elif 'lesson_1' == str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_1))
-            elif 'lesson_2' == str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_2))
-            elif 'lesson_3' == str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_3))
-            elif 'lesson_4' == str(answer['message_text']).lower():
-                send_message(chat_id, lesson3.lesson_three(lesson_4))
-            elif 'привет' in str(answer['message_text']).lower():
-                send_message(chat_id, 'Здравствуйте,' + name + '!\n' + 'Напишите "help"')
-        else:
-            continue
+    elif message.text.lower() == 'course1':
+        bot.send_message(message.chat.id, lesson3.lesson_three(lesson_1))
+    elif message.text.lower() == 'course2':
+        bot.send_message(message.chat.id, lesson3.lesson_three(lesson_2))
+    elif message.text.lower() == 'course3':
+        bot.send_message(message.chat.id, lesson3.lesson_three(lesson_3))
+    elif message.text.lower() == 'course4':
+        bot.send_message(message.chat.id, lesson3.lesson_three(lesson_4))
+    elif message.text.lower() == 'yemek':
+        try:
+            all_result = parseManas.index()
+            result = all_result['yemek1'] + ' - ' + all_result['kalori1'] + ' калорий\n' + all_result[
+                'yemek2'] + ' - ' + \
+                     all_result[
+                         'kalori2'] + ' калорий\n' + \
+                     all_result['yemek3'] + ' - ' + all_result['kalori3'] + ' калорий\n' + all_result[
+                         'yemek4'] + ' - ' + \
+                     all_result[
+                         'kalori4'] + ' калорий'
+            bot.send_message(message.chat.id, result)
+        except:
+            bot.send_message(message.chat.id, 'Сегодня выходной')
+    elif message.text.lower() == 'я тебя люблю':
+        bot.send_sticker(message.chat.id, 'CAADAgADxgEAAsoDBguh9vhwm5TPHRYE')
 
 
-if __name__ == '__main__':
-    main()
+@bot.message_handler(content_types=['sticker'])
+def sticker_id(message):
+    print(message)
+
+
+bot.polling()

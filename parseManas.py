@@ -17,22 +17,22 @@ def get_all_links(html):
     yemek1 = food[0].next
     y1 = str(yemek1).replace('Ä±', 'ı').replace('Ã', 'Ç').replace('Å', 'ş').replace('Ã¶', 'ö').replace('Ã§',
                                                                                                          'ç').replace(
-        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş')
+        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş').replace('Ä°', 'İ')
 
     yemek2 = food[1].next
     y2 = str(yemek2).replace('Ä±', 'ı').replace('Ã', 'Ç').replace('Å', 'ş').replace('Ã¶', 'ö').replace('Ã§',
                                                                                                          'ç').replace(
-        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş')
+        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş').replace('Ä°', 'İ')
 
     yemek3 = food[2].next
     y3 = str(yemek3).replace('Ä±', 'ı').replace('Ã', 'Ç').replace('Å', 'ş').replace('Ã¶', 'ö').replace('Ã§',
                                                                                                          'ç').replace(
-        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş')
+        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş').replace('Ä°', 'İ')
 
     yemek4 = food[3].next
     y4 = str(yemek4).replace('Ä±', 'ı').replace('Ã', 'Ç').replace('Å', 'ş').replace('Ã¶', 'ö').replace('Ã§',
                                                                                                          'ç').replace(
-        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş')
+        'Ä', 'ğ').replace('Ã¼', 'ü').replace('Å', 'Ş').replace('Ä°', 'İ')
 
     kalori1 = kalories[2].next
     kalori2 = kalories[4].next
