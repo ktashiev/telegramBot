@@ -2,6 +2,7 @@ import telebot
 import weather
 import lesson3
 import parseManas
+from datetime import datetime
 
 bot = telebot.TeleBot('720219419:AAGv4u2sDFt_VUuzZXDPh-rH2j4hJNAlLBE')
 keyboard1 = telebot.types.ReplyKeyboardMarkup()
@@ -28,7 +29,7 @@ def send_text(message):
         with open('help.txt', 'r') as text:
             for line in text:
                 l += line + '\n'
-        bot.send_message(message.chat.id, l)
+        bot.send_message(message.chat.id, l + str(datetime.now()))
     elif message.text.lower() == 'weather':
         w = 'Данное время: ' + weather.weather_result['time'] + '\n' + 'Текушая температура: ' + \
             weather.weather_result['temp_now'] + '\n' + 'Минимальная температура: ' + \
