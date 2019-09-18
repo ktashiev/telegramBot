@@ -13,7 +13,6 @@ def get_info_course_three(html):
     soup = BeautifulSoup(html, 'lxml')
     time = (datetime.now() + timedelta(hours=6)).time()
     time_now = str(time.hour) + ":" + str(time.minute)
-    # time_now = '10:35'
     help = ''
     times_html = soup.find('div', class_='.container-fluid').find('table',
                                                                   class_='table table-bordered').find_all('tr')
@@ -21,15 +20,18 @@ def get_info_course_three(html):
         try:
             if datetime.strptime(time_now, '%H:%M').time() <= datetime.strptime(str(i.next.next).split('-')[0],
                                                                                 '%H:%M').time():
-                if datetime.strptime('17:00', '%H:%M').time() >= datetime.strptime(
-                        str(i.find_all()[0].next).split('-')[0],
-                        '%H:%M').time():
+
+                if i.find_all('td')[week + 1].find('div') == ' Ayrılmış (Reserved)':
+                    continue
+                if i.find_all('td')[week + 1].find('div') == None:
+                    continue
+                if i.find_all()[0].next in ' #':
+                    continue
+                else:
                     help += i.find_all()[0].next + '\n'
-                    for num in range(5):
-                        if i.find_all()[week + num].next != ' Ayrılmış (Reserved)':
-                            if i.find_all()[week + num].next != " ":
-                                help += i.find_all()[week + num].next + '\n'
-                    help += '\n'
+                a = i.find_all('td')[week + 1].find('div')
+
+                help += a.next + '\n' + a.next.next.next + '\n' + a.next.next.next.next.next + '\n' + '\n'
         except:
             continue
     return help
@@ -44,4 +46,4 @@ def lesson_three(url):
 
 
 if __name__ == '__main__':
-    print(lesson_three('http://timetable.manas.edu.kg/department-printer/1'))
+    lesson_three('http://timetable.manas.edu.kg/department-printer/95')
